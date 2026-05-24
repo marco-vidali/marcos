@@ -35,7 +35,7 @@ pub fn enable_pin(pin_num: u8) {
     }
 }
 
-pub fn set_function(pin_num: u8, func: GPIOFunc) {
+pub fn set_pin_function(pin_num: u8, func: GPIOFunc) {
     if pin_num > 57 {
         return;
     }
