@@ -3,6 +3,7 @@ use core::ptr;
 use crate::PERIPHERALS_BASE_ADDR;
 
 const GPIO_BASE_ADDR: usize = PERIPHERALS_BASE_ADDR + 0x200000;
+const GPSET_BASE_ADDR: usize = GPIO_BASE_ADDR + 0x1c;
 const GPIO_PUP_PDN_BASE_ADDR: usize = GPIO_BASE_ADDR + 0xe4;
 
 #[repr(usize)]
@@ -23,7 +24,7 @@ pub fn enable_pin(pin_num: u8) {
     }
 
     let bit_start = (pin_num % 16) * 2;
-    let reg = (pin_num / 10) as usize;
+    let reg = (pin_num / 16) as usize;
     let target_addr = GPIO_PUP_PDN_BASE_ADDR + (reg * 4);
     let gpio_pup_pdn_ptr = target_addr as *mut u32;
 
@@ -39,7 +40,7 @@ pub fn set_function(pin_num: u8, func: GPIOFunc) {
         return;
     }
 
-    let bit_start = (pin_num * 3) % 30;
+    let bit_start = (pin_num % 10) * 3;
     let reg = (pin_num / 10) as usize;
     let target_addr = GPIO_BASE_ADDR + (reg * 4);
     let gpfsel_ptr = target_addr as *mut u32;
@@ -51,5 +52,21 @@ pub fn set_function(pin_num: u8, func: GPIOFunc) {
         reg_val |= (func as u32) << bit_start; // set function bits to desired function
 
         ptr::write_volatile(gpfsel_ptr, reg_val); // write new GPFSEL address value
+    }
+}
+
+pub fn set_pin(pin_num: u8) {
+    if pin_num > 57 {
+        return;
+    }
+
+    let bit_start = pin_num % 32;
+    let reg = (pin_num / 32) as usize;
+    let target_addr = GPSET_BASE_ADDR + (reg * 4);
+    let gpset_ptr = target_addr as *mut u32;
+
+    unsafe {
+        let reg_val = 1 << bit_start; // set pin bit to 1
+        ptr::write_volatile(gpset_ptr, reg_val); // write new GPSET address value
     }
 }
