@@ -7,7 +7,7 @@ const GPSET_BASE_ADDR: usize = GPIO_BASE_ADDR + 0x1c;
 const GPIO_PUP_PDN_BASE_ADDR: usize = GPIO_BASE_ADDR + 0xe4;
 
 #[repr(usize)]
-pub enum GPIOFunc {
+pub enum GPIOPinFunc {
     Input = 0,
     Output = 1,
     Alt0 = 4,
@@ -35,7 +35,7 @@ pub fn enable_pin(pin_num: u8) {
     }
 }
 
-pub fn set_pin_function(pin_num: u8, func: GPIOFunc) {
+pub fn set_pin_function(pin_num: u8, func: GPIOPinFunc) {
     if pin_num > 57 {
         return;
     }
