@@ -54,19 +54,3 @@ pub fn set_pin_function(pin_num: u8, func: GPIOPinFunc) {
         ptr::write_volatile(gpfsel_ptr, reg_val); // write new GPFSEL address value
     }
 }
-
-pub fn set_pin(pin_num: u8) {
-    if pin_num > 57 {
-        return;
-    }
-
-    let bit_start = pin_num % 32;
-    let reg = (pin_num / 32) as usize;
-    let target_addr = GPSET_BASE_ADDR + (reg * 4);
-    let gpset_ptr = target_addr as *mut u32;
-
-    unsafe {
-        let reg_val = 1 << bit_start; // set pin bit to 1
-        ptr::write_volatile(gpset_ptr, reg_val); // write new GPSET address value
-    }
-}
