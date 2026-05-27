@@ -3,7 +3,6 @@ use core::ptr;
 use crate::PERIPHERALS_BASE_ADDR;
 
 const GPIO_BASE_ADDR: usize = PERIPHERALS_BASE_ADDR + 0x200000;
-const GPSET_BASE_ADDR: usize = GPIO_BASE_ADDR + 0x1c;
 const GPIO_PUP_PDN_BASE_ADDR: usize = GPIO_BASE_ADDR + 0xe4;
 
 #[repr(usize)]
