@@ -3,7 +3,7 @@ use core::ptr;
 use crate::PERIPHERALS_BASE_ADDR;
 
 const GPIO_BASE_ADDR: usize = PERIPHERALS_BASE_ADDR + 0x200000;
-const GPIO_PUP_PDN_BASE_ADDR: usize = GPIO_BASE_ADDR + 0xe4;
+const GPIO_PUP_PDN_CNTRL_BASE_ADDR: usize = GPIO_BASE_ADDR + 0xe4;
 
 #[repr(usize)]
 pub enum GPIOPinFunc {
@@ -22,9 +22,9 @@ pub fn enable_pin(pin_num: u8) {
         return;
     }
 
-    let bit_start = (pin_num % 16) * 2;
     let reg = (pin_num / 16) as usize;
-    let target_addr = GPIO_PUP_PDN_BASE_ADDR + (reg * 4);
+    let bit_start = (pin_num % 16) * 2;
+    let target_addr = GPIO_PUP_PDN_CNTRL_BASE_ADDR + (reg * 4);
     let gpio_pup_pdn_ptr = target_addr as *mut u32;
 
     unsafe {
@@ -34,7 +34,7 @@ pub fn enable_pin(pin_num: u8) {
     }
 }
 
-pub fn set_pin_function(pin_num: u8, func: GPIOPinFunc) {
+pub fn set_pin_func(pin_num: u8, func: GPIOPinFunc) {
     if pin_num > 57 {
         return;
     }
