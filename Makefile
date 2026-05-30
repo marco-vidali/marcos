@@ -16,8 +16,8 @@ armstub/build/armstub_s.o: armstub/src/armstub.s
 
 armstub: armstub/build/armstub_s.o
 	$(ARMGNU)-ld --section-start=.text=0 -o armstub/build/armstub.elf armstub/build/armstub_s.o
-	$(ARMGNU)-objcopy armstub/build/armstub.elf -O binary sd/armstub8-2711.bin.bin
-	cp sd/armstub8-2711.bin.bin $(BOOTMNT)/
+	$(ARMGNU)-objcopy armstub/build/armstub.elf -O binary sd/armstub.bin
+	cp sd/armstub.bin $(BOOTMNT)/
 	sync
 
 clean:
